@@ -13,7 +13,10 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        System.out.println(r);
+        if (size == storage.length) {
+            return;
+        }
+
         if (r.uuid == null) {
             return;
         }
