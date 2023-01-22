@@ -37,23 +37,26 @@ public class ArrayStorage {
             return;
         }
 
-        if (uuid.equals("")) {
+        if (uuid.isEmpty()) {
             return;
         }
 
-        int indexDelElement = -1;
+        int indexForDelete = -1;
         for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
-                indexDelElement = i;
+                indexForDelete = i;
+                break;
             }
         }
 
-        if (indexDelElement == -1) {
+        if (indexForDelete == -1) {
             return;
         }
 
-        for (int i = indexDelElement + 1; i < size; i++) {
-            storage[i - 1] = storage[i];
+        if(indexForDelete != size - 1) {
+            for (int i = indexForDelete + 1; i < size; i++) {
+                storage[i - 1] = storage[i];
+            }
         }
         size--;
     }
