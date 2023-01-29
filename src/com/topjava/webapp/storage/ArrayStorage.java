@@ -8,7 +8,8 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    private static final int STORAGE_LIMIT = 10000;
+    private final Resume[] storage = new Resume[STORAGE_LIMIT];
     private int size;
 
     public void clear() {
@@ -17,22 +18,18 @@ public class ArrayStorage {
     }
 
     public void save(Resume r) {
-        if (size == storage.length) {
+        if (size == STORAGE_LIMIT) {
+            System.out.println("Ошибка при сохранении: хранилище заполнено");
             return;
-        }
-
-        String uuid = r.getUuid();
-        int index = getResumeIndexInStorage(uuid);
-
-        if(index == -1 && uuid != null) {
-            storage[size++] = r;
+        } else if (getIndex(r.getUuid()) != -1) {
+            System.out.printf("Ошибка при сохранении: резюме с uuid - '%s' уже существует\n", r.getUuid());
         } else {
-            System.out.printf("Ошибка при сохранении: резюме с uuid - '%s' уже существует\n", uuid);
+            storage[size++] = r;
         }
     }
 
     public void update(Resume resume) {
-        int index = getResumeIndexInStorage(resume.getUuid());
+        int index = getIndex(resume.getUuid());
         if (index != -1) {
             storage[index] = resume;
         } else {
@@ -41,7 +38,7 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        int index = getResumeIndexInStorage(uuid);
+        int index = getIndex(uuid);
         if (index != -1) {
             return storage[index];
         }
@@ -50,20 +47,14 @@ public class ArrayStorage {
     }
 
     public void delete(String uuid) {
-        if (size == 0 && uuid.isEmpty()) {
-            return;
-        }
-
-        int indexForDelete = getResumeIndexInStorage(uuid);
-        if (indexForDelete == -1) {
+        int index = getIndex(uuid);
+        if (index == -1) {
             System.out.printf("Ошибка при удалении: не удалось найти резюме с uuid - '%s'\n", uuid);
             return;
         }
 
-        if (indexForDelete != size - 1) {
-            for (int i = indexForDelete + 1; i < size; i++) {
-                storage[i - 1] = storage[i];
-            }
+        if (index != size - 1) {
+            storage[index] = storage[size - 1];
         }
         storage[size - 1] = null;
         size--;
@@ -80,10 +71,10 @@ public class ArrayStorage {
         return size;
     }
 
-    private int getResumeIndexInStorage(String uuid) {
-        for (int index = 0; index < size; index++) {
-            if (storage[index].getUuid().equals(uuid)) {
-                return index;
+    private int getIndex(String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i].getUuid().equals(uuid)) {
+                return i;
             }
         }
         return -1;
