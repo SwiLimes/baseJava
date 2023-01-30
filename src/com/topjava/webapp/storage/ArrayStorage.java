@@ -20,7 +20,6 @@ public class ArrayStorage {
     public void save(Resume r) {
         if (size == STORAGE_LIMIT) {
             System.out.println("Ошибка при сохранении: хранилище заполнено");
-            return;
         } else if (getIndex(r.getUuid()) != -1) {
             System.out.printf("Ошибка при сохранении: резюме с uuid - '%s' уже существует\n", r.getUuid());
         } else {
