@@ -7,15 +7,7 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes
  */
-public class ArrayStorage {
-    private static final int STORAGE_LIMIT = 10000;
-    private final Resume[] storage = new Resume[STORAGE_LIMIT];
-    private int size;
-
-    public void clear() {
-        Arrays.fill(storage, 0, size, null);
-        size = 0;
-    }
+public class ArrayStorage extends AbstractArrayStorage {
 
     public void save(Resume r) {
         if (size == STORAGE_LIMIT) {
@@ -27,52 +19,23 @@ public class ArrayStorage {
         }
     }
 
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index != -1) {
-            storage[index] = resume;
-        } else {
-            System.out.printf("Ошибка при обновлении: не удалось найти резюме с uuid - '%s'\n", resume.getUuid());
-        }
-    }
-
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index != -1) {
-            return storage[index];
-        }
-        System.out.printf("Ошибка при получении: не удалось найти резюме с uuid - '%s'\n", uuid);
-        return null;
-    }
-
     public void delete(String uuid) {
         int index = getIndex(uuid);
-        if (index == -1) {
+        if(index == -1) {
             System.out.printf("Ошибка при удалении: не удалось найти резюме с uuid - '%s'\n", uuid);
             return;
         }
 
-        if (index != size - 1) {
+        if(index != size) {
             storage[index] = storage[size - 1];
         }
         storage[size - 1] = null;
         size--;
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
-    }
-
-    public int size() {
-        return size;
-    }
-
-    private int getIndex(String uuid) {
+    protected int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid().equals(uuid)) {
+            if (uuid.equals(storage[i].getUuid())) {
                 return i;
             }
         }
