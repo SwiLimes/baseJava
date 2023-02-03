@@ -7,34 +7,16 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void save(Resume r) {
-        if(r.getUuid() == null || r.getUuid().isEmpty()) {
-            return;
-        } else if (size == STORAGE_LIMIT) {
-            System.out.println("Ошибка при сохранении: хранилище заполнено");
-        } else {
-            int index = getIndex(r.getUuid());
-            if (index >= 0) {
-                System.out.printf("Ошибка при сохранении: резюме с uuid - '%s' уже существует\n", r.getUuid());
-            } else {
-                index = Math.abs(index) - 1;
-                System.arraycopy(storage, index, storage, index + 1, size - index);
-                storage[index] = r;
-                size++;
-            }
-        }
+    public void saveElement(Resume r) {
+        int index = getIndex(r.getUuid());
+        index = Math.abs(index) - 1;
+        System.arraycopy(storage, index, storage, index + 1, size - index);
+        storage[index] = r;
     }
 
     @Override
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            System.out.printf("Ошибка при удалении: не удалось найти резюме с uuid - '%s'\n", uuid);
-            return;
-        }
+    public void deleteElement(int index) {
         System.arraycopy(storage, index + 1, storage, index, size - index);
-        storage[size] = null;
-        size--;
     }
 
     @Override
