@@ -7,11 +7,11 @@ import com.topjava.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public void saveElement(Resume r) {
+    protected void saveElement(Resume r) {
         storage[size] = r;
     }
 
-    public void deleteElement(int index) {
+    protected void deleteElement(int index) {
         if (index != size - 1) {
             storage[index] = storage[size - 1];
         }
