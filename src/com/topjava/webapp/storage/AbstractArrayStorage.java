@@ -1,5 +1,8 @@
 package com.topjava.webapp.storage;
 
+import com.topjava.webapp.exception.ExistStorageException;
+import com.topjava.webapp.exception.NotExistStorageException;
+import com.topjava.webapp.exception.StorageException;
 import com.topjava.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -25,11 +28,11 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public void save(Resume r) {
         if (size == STORAGE_LIMIT) {
-            System.out.println("Ошибка при сохранении: хранилище заполнено");
+            throw new StorageException("Storage overflow", r.getUuid());
         } else if (r.getUuid() == null || r.getUuid().isEmpty()) {
-            System.out.println("Ошибка при сохранении: передано пустое значение");
+            throw new StorageException("Empty uuid", null);
         } else if (getIndex(r.getUuid()) >= 0) {
-            System.out.printf("Ошибка при сохранении: резюме с uuid - '%s' уже существует\n", r.getUuid());
+            throw new ExistStorageException(r.getUuid());
         } else {
             saveElement(r);
             size++;
@@ -39,7 +42,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            System.out.printf("Ошибка при удалении: не удалось найти резюме с uuid - '%s'\n", uuid);
+            throw new NotExistStorageException(uuid);
         } else {
             deleteElement(index);
             size--;
@@ -49,9 +52,8 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public Resume get(String uuid) {
         int index = getIndex(uuid);
-        if (index == -1) {
-            System.out.printf("Ошибка при получении: не удалось найти резюме с uuid - '%s'\n", uuid);
-            return null;
+        if (index < 0) {
+            throw new NotExistStorageException(uuid);
         }
         return storage[index];
     }
@@ -59,7 +61,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void update(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index < 0) {
-            System.out.printf("Ошибка при обновлении: не удалось найти резюме с uuid - '%s'\n", resume.getUuid());
+            throw new NotExistStorageException(resume.getUuid());
         } else {
             storage[index] = resume;
         }
