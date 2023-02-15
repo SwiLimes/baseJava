@@ -7,6 +7,7 @@ import com.topjava.webapp.model.Resume;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIf;
 
 class AbstractArrayStorageTest {
     private final Storage storage;
@@ -121,6 +122,11 @@ class AbstractArrayStorageTest {
         });
     }
 
+    private boolean isListStorage() {
+        return storage instanceof ListStorage;
+    }
+
+    @DisabledIf("isListStorage")
     @Test
     void saveOverflow() {
         storage.clear();
