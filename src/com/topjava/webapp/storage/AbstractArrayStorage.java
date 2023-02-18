@@ -11,6 +11,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
+    @Override
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
@@ -30,20 +31,29 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size--;
     }
 
+    @Override
     public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }
 
+    @Override
     public int size() {
         return size;
     }
 
     @Override
-    protected void updateElement(int index, Resume r) {
-        storage[index] = r;
+    protected void updateElement(Object searchKey, Resume r) {
+        storage[(int) searchKey] = r;
     }
 
-    protected Resume getResume(int index) {
-        return storage[index];
+    @Override
+    protected Resume getResume(Object searchKey) {
+        return storage[(int) searchKey];
     }
+
+    @Override
+    protected boolean isExist(Object searchKey) {
+        return (int) searchKey >= 0;
+    }
+
 }

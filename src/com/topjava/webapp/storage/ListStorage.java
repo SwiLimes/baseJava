@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    private static final List<Resume> storage = new LinkedList<>();
+    private final List<Resume> storage = new LinkedList<>();
     @Override
     public void clear() {
         storage.clear();
@@ -14,8 +14,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        Resume[] resumes = storage.toArray(new Resume[0]);
-        return resumes;
+        return storage.toArray(new Resume[storage.size()]);
     }
 
     @Override
@@ -29,26 +28,28 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void deleteElement(int index) {
-        storage.remove(index);
+    protected void deleteElement(Object searchKey) {
+        storage.remove((int) searchKey);
     }
 
     @Override
-    protected void updateElement(int index, Resume r) {
-        storage.set(index, r);
+    protected void updateElement(Object searchKey, Resume r) {
+        storage.set((int) searchKey, r);
     }
 
     @Override
     protected int getIndex(String uuid) {
         Resume resume = new Resume(uuid);
-        if (storage.contains(resume)) {
-            return storage.indexOf(resume);
-        }
-        return -1;
+        return storage.indexOf(resume);
     }
 
     @Override
-    protected Resume getResume(int index) {
-        return storage.get(index);
+    protected Resume getResume(Object searchKey) {
+        return storage.get((int) searchKey);
+    }
+
+    @Override
+    protected boolean isExist(Object searchKey) {
+        return (int) searchKey < 0 ? false : true;
     }
 }

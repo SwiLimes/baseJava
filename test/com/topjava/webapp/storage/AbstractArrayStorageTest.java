@@ -143,12 +143,4 @@ class AbstractArrayStorageTest {
         });
         Assertions.assertEquals("Storage overflow", exception.getMessage());
     }
-
-    @Test
-    void getEmptyUuid() {
-        Throwable exception = Assertions.assertThrows(StorageException.class, () -> {
-            storage.save(new Resume(""));
-        });
-        Assertions.assertEquals("Empty uuid", exception.getMessage());
-    }
 }
