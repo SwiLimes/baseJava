@@ -122,11 +122,12 @@ class AbstractArrayStorageTest {
         });
     }
 
-    private boolean isListStorage() {
-        return storage instanceof ListStorage;
+    private boolean isListOrMapStorage() {
+        return storage instanceof ListStorage || storage instanceof MapStorage;
     }
 
-    @DisabledIf("isListStorage")
+
+    @DisabledIf("isListOrMapStorage")
     @Test
     void saveOverflow() {
         storage.clear();

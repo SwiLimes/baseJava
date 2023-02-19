@@ -7,41 +7,42 @@ import com.topjava.webapp.model.Resume;
 public abstract class AbstractStorage implements Storage {
     @Override
     public void save(Resume r) {
-        Object searchKey = getIndex((r.getUuid()));
-        if (isExist(searchKey)) {
-            throw new ExistStorageException(r.getUuid());
-        } else {
-            saveElement(r);
-        }
+        Object searchKey = getNonExistingSearchKey(r.getUuid());
+        saveElement(r);
     }
 
     @Override
     public void update(Resume r) {
-        Object searchKey = getIndex(r.getUuid());
-        if (!isExist(searchKey)) {
-            throw new NotExistStorageException(r.getUuid());
-        } else {
-            updateElement(searchKey, r);
-        }
+        Object searchKey = getExistingSearchKey(r.getUuid());
+        updateElement(searchKey, r);
     }
 
     @Override
     public Resume get(String uuid) {
-        Object searchKey = getIndex(uuid);
-        if (!isExist(searchKey)) {
-            throw new NotExistStorageException(uuid);
-        }
+        Object searchKey = getExistingSearchKey(uuid);
         return getResume(searchKey);
     }
 
     @Override
     public void delete(String uuid) {
+        Object searchKey = getExistingSearchKey(uuid);
+        deleteElement(searchKey);
+    }
+
+    private Object getExistingSearchKey(String uuid) {
         Object searchKey = getIndex(uuid);
         if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
-        } else {
-            deleteElement(searchKey);
         }
+        return searchKey;
+    }
+
+    private Object getNonExistingSearchKey(String uuid) {
+        Object searchKey = getIndex(uuid);
+        if (isExist(searchKey)) {
+            throw new ExistStorageException(uuid);
+        }
+        return searchKey;
     }
 
     protected abstract void saveElement(Resume r);
@@ -50,7 +51,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void updateElement(Object searchKey, Resume r);
 
-    protected abstract int getIndex(String uuid);
+    protected abstract Object getIndex(String uuid);
 
     protected abstract Resume getResume(Object searchKey);
 
