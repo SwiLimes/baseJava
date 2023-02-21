@@ -16,6 +16,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
+
+    @Override
+    public Resume[] getAll() {
+        return Arrays.copyOf(storage, size);
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
     @Override
     public void doSave(Resume r) {
         if (size == STORAGE_LIMIT) {
@@ -29,16 +40,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     public void doDelete(Object index) {
         deleteElement((Integer) index);
         size--;
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
-    }
-
-    @Override
-    public int size() {
-        return size;
     }
 
     @Override

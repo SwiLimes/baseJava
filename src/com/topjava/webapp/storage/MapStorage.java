@@ -23,6 +23,12 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
+    protected Object getSearchKey(String uuid) {
+        Object searchKey = storage.get(uuid);
+        return Objects.isNull(searchKey) ? null : uuid;
+    }
+
+    @Override
     protected void doSave(Resume r) {
         storage.put(r.getUuid(), r);
     }
@@ -35,12 +41,6 @@ public class MapStorage extends AbstractStorage {
     @Override
     protected void doUpdate(Object searchKey, Resume r) {
         storage.replace((String) searchKey, r);
-    }
-
-    @Override
-    protected Object getIndex(String uuid) {
-        Object searchKey = storage.get(uuid);
-        return Objects.isNull(searchKey) ? null : uuid;
     }
 
     @Override

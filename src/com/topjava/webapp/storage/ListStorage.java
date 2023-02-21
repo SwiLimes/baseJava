@@ -23,6 +23,12 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
+    protected Object getSearchKey(String uuid) {
+        Resume resume = new Resume(uuid);
+        return storage.indexOf(resume);
+    }
+
+    @Override
     protected void doSave(Resume r) {
         storage.add(r);
     }
@@ -35,12 +41,6 @@ public class ListStorage extends AbstractStorage {
     @Override
     protected void doUpdate(Object searchKey, Resume r) {
         storage.set((Integer) searchKey, r);
-    }
-
-    @Override
-    protected Integer getIndex(String uuid) {
-        Resume resume = new Resume(uuid);
-        return storage.indexOf(resume);
     }
 
     @Override
