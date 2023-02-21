@@ -43,17 +43,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     protected void updateElement(Object searchKey, Resume r) {
-        storage[(int) searchKey] = r;
+        storage[(Integer) searchKey] = r;
     }
 
     @Override
     protected Resume getResume(Object searchKey) {
-        return storage[(int) searchKey];
+        return storage[(Integer) searchKey];
     }
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return (int) searchKey >= 0;
+        return (Integer) searchKey >= 0;
     }
 
 }
