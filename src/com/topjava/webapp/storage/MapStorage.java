@@ -23,17 +23,17 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveElement(Resume r) {
+    protected void doSave(Resume r) {
         storage.put(r.getUuid(), r);
     }
 
     @Override
-    protected void deleteElement(Object searchKey) {
+    protected void doDelete(Object searchKey) {
         storage.remove(searchKey);
     }
 
     @Override
-    protected void updateElement(Object searchKey, Resume r) {
+    protected void doUpdate(Object searchKey, Resume r) {
         storage.replace((String) searchKey, r);
     }
 
@@ -44,7 +44,7 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume getResume(Object searchKey) {
+    protected Resume doGet(Object searchKey) {
         return storage.get(searchKey);
     }
 

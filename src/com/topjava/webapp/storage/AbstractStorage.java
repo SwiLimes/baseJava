@@ -8,25 +8,25 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public void save(Resume r) {
         Object searchKey = getNonExistingSearchKey(r.getUuid());
-        saveElement(r);
+        doSave(r);
     }
 
     @Override
     public void update(Resume r) {
         Object searchKey = getExistingSearchKey(r.getUuid());
-        updateElement(searchKey, r);
+        doUpdate(searchKey, r);
     }
 
     @Override
     public Resume get(String uuid) {
         Object searchKey = getExistingSearchKey(uuid);
-        return getResume(searchKey);
+        return doGet(searchKey);
     }
 
     @Override
     public void delete(String uuid) {
         Object searchKey = getExistingSearchKey(uuid);
-        deleteElement(searchKey);
+        doDelete(searchKey);
     }
 
     private Object getExistingSearchKey(String uuid) {
@@ -45,15 +45,15 @@ public abstract class AbstractStorage implements Storage {
         return searchKey;
     }
 
-    protected abstract void saveElement(Resume r);
+    protected abstract void doSave(Resume r);
 
-    protected abstract void deleteElement(Object searchKey);
+    protected abstract void doDelete(Object searchKey);
 
-    protected abstract void updateElement(Object searchKey, Resume r);
+    protected abstract void doUpdate(Object searchKey, Resume r);
 
     protected abstract Object getIndex(String uuid);
 
-    protected abstract Resume getResume(Object searchKey);
+    protected abstract Resume doGet(Object searchKey);
 
     protected abstract boolean isExist(Object searchKey);
 }

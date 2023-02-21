@@ -13,8 +13,7 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void deleteElement(Object searchKey) {
-        int index = (Integer) searchKey;
+    protected void deleteElement(int index) {
         if (index != size - 1) {
             storage[index] = storage[size - 1];
         }
