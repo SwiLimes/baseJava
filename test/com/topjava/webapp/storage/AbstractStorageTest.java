@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
 
-class AbstractArrayStorageTest {
+class AbstractStorageTest {
     private final Storage storage;
 
     private static final String UUID1 = "uuid1";
@@ -23,7 +23,7 @@ class AbstractArrayStorageTest {
     private static final Resume RESUME_4 = new Resume(UUID4);
 
 
-    public AbstractArrayStorageTest(Storage storage) {
+    public AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -75,9 +75,7 @@ class AbstractArrayStorageTest {
         Resume resume = storage.get(UUID1);
         storage.delete(UUID1);
         assertSize(2);
-        Assertions.assertThrows(NotExistStorageException.class, () -> {
-            assertGet(resume);
-        });
+        Assertions.assertThrows(NotExistStorageException.class, () -> assertGet(resume));
     }
 
     @Test
@@ -96,30 +94,22 @@ class AbstractArrayStorageTest {
 
     @Test
     void getNotExist() {
-        Assertions.assertThrows(NotExistStorageException.class, () -> {
-            storage.get(UUID_NOT_EXIST);
-        });
+        Assertions.assertThrows(NotExistStorageException.class, () -> storage.get(UUID_NOT_EXIST));
     }
 
     @Test
     void saveExist() {
-        Assertions.assertThrows(ExistStorageException.class, () -> {
-            storage.save(RESUME_2);
-        });
+        Assertions.assertThrows(ExistStorageException.class, () -> storage.save(RESUME_2));
     }
 
     @Test
     void deleteNotExist() {
-        Assertions.assertThrows(NotExistStorageException.class, () -> {
-            storage.delete(UUID_NOT_EXIST);
-        });
+        Assertions.assertThrows(NotExistStorageException.class, () -> storage.delete(UUID_NOT_EXIST));
     }
 
     @Test
     void updateNotExist() {
-        Assertions.assertThrows(NotExistStorageException.class, () -> {
-            storage.update(RESUME_4);
-        });
+        Assertions.assertThrows(NotExistStorageException.class, () -> storage.update(RESUME_4));
     }
 
     private boolean isListOrMapStorage() {
@@ -139,9 +129,7 @@ class AbstractArrayStorageTest {
             Assertions.fail("Overflow came early");
         }
 
-        Throwable exception = Assertions.assertThrows(StorageException.class, () -> {
-            storage.save(new Resume());
-        });
+        Throwable exception = Assertions.assertThrows(StorageException.class, () -> storage.save(new Resume()));
         Assertions.assertEquals("Storage overflow", exception.getMessage());
     }
 }
