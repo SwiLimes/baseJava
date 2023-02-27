@@ -2,11 +2,11 @@ package com.topjava.webapp.storage;
 
 import com.topjava.webapp.model.Resume;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-public class ListStorage extends AbstractStorage {
-    private final List<Resume> storage = new LinkedList<>();
+class MapResumeStorage extends AbstractStorage {
+    private final Map<String, Resume> storage = new LinkedHashMap<>();
+
     @Override
     public void clear() {
         storage.clear();
@@ -14,7 +14,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public List<Resume> getListResumes() {
-        return storage;
+        return new ArrayList<>(storage.values());
     }
 
     @Override
@@ -24,32 +24,32 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected Object getSearchKey(String uuid) {
-        Resume resume = new Resume(uuid);
-        return storage.indexOf(resume);
+        return storage.get(uuid);
     }
 
     @Override
     protected void doSave(Resume r) {
-        storage.add(r);
+        storage.put(r.getUuid(), r);
     }
 
     @Override
     protected void doDelete(Object searchKey) {
-        storage.remove(((Integer) searchKey).intValue());
+        Resume resume = (Resume) searchKey;
+        storage.remove(resume.getUuid(), resume);
     }
 
     @Override
     protected void doUpdate(Object searchKey, Resume r) {
-        storage.set((Integer) searchKey, r);
+        storage.replace(r.getUuid(), r);
     }
 
     @Override
     protected Resume doGet(Object searchKey) {
-        return storage.get((Integer) searchKey);
+        return (Resume) searchKey;
     }
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return (Integer) searchKey >= 0;
+        return Objects.nonNull(searchKey);
     }
 }

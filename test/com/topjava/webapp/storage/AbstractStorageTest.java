@@ -2,25 +2,35 @@ package com.topjava.webapp.storage;
 
 import com.topjava.webapp.exception.ExistStorageException;
 import com.topjava.webapp.exception.NotExistStorageException;
-import com.topjava.webapp.exception.StorageException;
 import com.topjava.webapp.model.Resume;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIf;
 
-class AbstractStorageTest {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class AbstractStorageTest {
     private final Storage storage;
 
     private static final String UUID1 = "uuid1";
+    private static final String NAME1 = "name1";
+
     private static final String UUID2 = "uuid2";
+    private static final String NAME2 = "name2";
+
     private static final String UUID3 = "uuid3";
+    private static final String NAME3 = "name3";
+
     private static final String UUID4 = "uuid4";
+    private static final String NAME4 = "name4";
+
     private static final String UUID_NOT_EXIST = "Fake";
-    private static final Resume RESUME_1 = new Resume(UUID1);
-    private static final Resume RESUME_2 = new Resume(UUID2);
-    private static final Resume RESUME_3 = new Resume(UUID3);
-    private static final Resume RESUME_4 = new Resume(UUID4);
+    private static final Resume RESUME_1 = new Resume(UUID1, NAME1);
+    private static final Resume RESUME_2 = new Resume(UUID2, NAME2);
+    private static final Resume RESUME_3 = new Resume(UUID3, NAME3);
+    private static final Resume RESUME_4 = new Resume(UUID4, NAME4);
 
 
     public AbstractStorageTest(Storage storage) {
@@ -48,14 +58,14 @@ class AbstractStorageTest {
         storage.clear();
         assertSize(0);
 
-        Resume[] expected = {};
-        Assertions.assertArrayEquals(expected, storage.getAll());
+        List<Resume> expected = new ArrayList<>();
+        Assertions.assertIterableEquals(expected, storage.getAllSorted());
     }
 
     @Test
-    void getAll() {
-        Resume[] expected = {RESUME_1, RESUME_2, RESUME_3};
-        Assertions.assertArrayEquals(expected, storage.getAll());
+    void getAllSorted() {
+        List<Resume> expected = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
+        Assertions.assertIterableEquals(expected, storage.getAllSorted());
     }
 
     @Test
@@ -110,26 +120,5 @@ class AbstractStorageTest {
     @Test
     void updateNotExist() {
         Assertions.assertThrows(NotExistStorageException.class, () -> storage.update(RESUME_4));
-    }
-
-    private boolean isListOrMapStorage() {
-        return storage instanceof ListStorage || storage instanceof MapStorage;
-    }
-
-
-    @DisabledIf("isListOrMapStorage")
-    @Test
-    void saveOverflow() {
-        storage.clear();
-        try {
-            for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume());
-            }
-        } catch (StorageException exception) {
-            Assertions.fail("Overflow came early");
-        }
-
-        Throwable exception = Assertions.assertThrows(StorageException.class, () -> storage.save(new Resume()));
-        Assertions.assertEquals("Storage overflow", exception.getMessage());
     }
 }
