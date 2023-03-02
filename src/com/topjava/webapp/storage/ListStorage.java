@@ -13,8 +13,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getListResumes() {
-        return storage;
+    public List<Resume> doCopyAll() {
+        return new LinkedList<>(storage);
     }
 
     @Override
@@ -24,8 +24,12 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected Object getSearchKey(String uuid) {
-        Resume resume = new Resume(uuid);
-        return storage.indexOf(resume);
+        for (int i = 0; i < storage.size(); i++) {
+            if (storage.get(i).getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -50,6 +54,6 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return (Integer) searchKey >= 0;
+        return searchKey != null;
     }
 }

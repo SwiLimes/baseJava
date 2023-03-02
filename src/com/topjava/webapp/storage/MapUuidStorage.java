@@ -13,7 +13,7 @@ public class MapUuidStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getListResumes() {
+    public List<Resume> doCopyAll() {
         return new ArrayList<>(storage.values());
     }
 
@@ -40,7 +40,7 @@ public class MapUuidStorage extends AbstractStorage {
 
     @Override
     protected void doUpdate(Object uuid, Resume r) {
-        storage.replace((String) uuid, r);
+        storage.put((String) uuid, r);
     }
 
     @Override
