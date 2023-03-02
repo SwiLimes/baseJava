@@ -6,10 +6,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class AbstractArrayStorageTest extends AbstractStorageTest {
-    Storage storage;
+
     public AbstractArrayStorageTest(Storage storage) {
         super(storage);
-        this.storage = storage;
     }
 
     @Test
@@ -17,13 +16,13 @@ public class AbstractArrayStorageTest extends AbstractStorageTest {
         storage.clear();
         try {
             for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume());
+                storage.save(new Resume("Name" + i));
             }
         } catch (StorageException exception) {
             Assertions.fail("Overflow came early");
         }
 
-        Throwable exception = Assertions.assertThrows(StorageException.class, () -> storage.save(new Resume()));
+        Throwable exception = Assertions.assertThrows(StorageException.class, () -> storage.save(new Resume("Overflow")));
         Assertions.assertEquals("Storage overflow", exception.getMessage());
     }
 }

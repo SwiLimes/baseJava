@@ -9,14 +9,10 @@ public class Resume {
 
     // Unique identifier
     private final String uuid;
-    private String fullName;
+    private final String fullName;
 
-    public Resume() {
-        this(UUID.randomUUID().toString());
-    }
-
-    public Resume(String uuid) {
-        this.uuid = uuid;
+    public Resume(String fullName) {
+        this(UUID.randomUUID().toString(), fullName);
     }
 
     public Resume(String uuid, String fullName) {

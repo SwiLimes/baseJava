@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AbstractStorageTest {
-    private final Storage storage;
+    protected final Storage storage;
 
     private static final String UUID1 = "uuid1";
     private static final String NAME1 = "name1";
