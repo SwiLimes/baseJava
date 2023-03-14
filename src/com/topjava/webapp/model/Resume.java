@@ -14,15 +14,8 @@ public class Resume {
     // Unique identifier
     private final String uuid;
     private final String fullName;
-    private List<String> contacts;
-    private static final Map<SectionType, AbstractSection> sections = new EnumMap<SectionType, AbstractSection>(SectionType.class) {{
-        put(SectionType.PERSONAL, new TextSection());
-        put(SectionType.OBJECTIVE, new TextSection());
-        put(SectionType.ACHIEVEMENT, new ListSection());
-        put(SectionType.QUALIFICATIONS, new ListSection());
-        put(SectionType.EXPERIENCE, new CompanySection());
-        put(SectionType.EDUCATION, new CompanySection());
-    }};
+    private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -43,16 +36,20 @@ public class Resume {
         return fullName;
     }
 
-    public List<String> getContacts() {
+    public Map<ContactType, String> getContacts() {
         return contacts;
     }
 
-    public void setContacts(List<String> contacts) {
+    public void setContacts(Map<ContactType, String> contacts) {
         this.contacts = contacts;
     }
 
     public Map<SectionType, AbstractSection> getSections() {
         return sections;
+    }
+
+    public void setSections(Map<SectionType, AbstractSection> sections) {
+        this.sections = sections;
     }
 
     @Override

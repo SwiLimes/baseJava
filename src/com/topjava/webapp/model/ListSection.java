@@ -15,23 +15,31 @@ public class ListSection extends AbstractSection {
         this.stringList = stringList;
     }
 
-    @Override
-    public void setContent(Object content) {
-        this.stringList = (List<String>) content;
+    public List<String> getStringList() {
+        return stringList;
+    }
+
+    public void setStringList(List<String> stringList) {
+        this.stringList = stringList;
     }
 
     @Override
-    public String getContent() {
-        if (Objects.isNull(stringList)) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder();
-        for (String str : stringList) {
-            sb.append('*').append(str);
-            sb.append("\n");
-        }
-        return sb.toString();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ListSection that = (ListSection) o;
+
+        return Objects.equals(stringList, that.stringList);
     }
 
+    @Override
+    public int hashCode() {
+        return stringList != null ? stringList.hashCode() : 0;
+    }
 
+    @Override
+    public String toString() {
+        return stringList.toString();
+    }
 }

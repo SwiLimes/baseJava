@@ -1,6 +1,7 @@
 package com.topjava.webapp.model;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CompanySection extends AbstractSection {
 
@@ -14,23 +15,31 @@ public class CompanySection extends AbstractSection {
         this.companies = companies;
     }
 
-    @Override
-    public void setContent(Object companies) {
-        this.companies = (List<Company>) companies;
+    public List<Company> getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(List<Company> companies) {
+        this.companies = companies;
     }
 
     @Override
-    public String getContent() {
-        if (companies.isEmpty()) {
-            return "";
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        StringBuilder sb = new StringBuilder();
-        for (Company company : companies) {
-            sb.append(company).append("\n");
-        }
-        return sb.toString();
+        CompanySection that = (CompanySection) o;
+
+        return Objects.equals(companies, that.companies);
     }
 
+    @Override
+    public int hashCode() {
+        return companies != null ? companies.hashCode() : 0;
+    }
 
+    @Override
+    public String toString() {
+        return companies.toString();
+    }
 }
