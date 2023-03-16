@@ -2,7 +2,6 @@ package com.topjava.webapp.model;
 
 import java.util.Objects;
 import java.util.UUID;
-import java.util.List;
 import java.util.Map;
 import java.util.EnumMap;
 
@@ -50,6 +49,14 @@ public class Resume {
 
     public void setSections(Map<SectionType, AbstractSection> sections) {
         this.sections = sections;
+    }
+
+    public String getContact(ContactType type) {
+        return contacts.get(type);
+    }
+
+    public AbstractSection getSection(SectionType type) {
+        return sections.get(type);
     }
 
     @Override

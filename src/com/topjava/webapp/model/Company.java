@@ -11,6 +11,7 @@ public class Company {
     private List<Period> periods;
 
     public Company(String name, String website) {
+        Objects.requireNonNull(name, "name must not be null");
         this.name = name;
         this.website = website;
     }
@@ -71,6 +72,9 @@ public class Company {
         }
 
         public Period(String startDate, String endDate, String title, String description) {
+            Objects.requireNonNull(startDate, "startDate must not be null");
+            Objects.requireNonNull(endDate, "endDate must not be null");
+            Objects.requireNonNull(title, "title must not be null");
             this.startDate = LocalDate.parse(startDate, formatter);
             this.endDate = LocalDate.parse(endDate, formatter);
             this.title = title;

@@ -5,22 +5,15 @@ import java.util.Objects;
 
 public class CompanySection extends AbstractSection {
 
-    private List<Company> companies;
-
-    public CompanySection() {
-        this.companies = null;
-    }
+    private final List<Company> companies;
 
     public CompanySection(List<Company> companies) {
+        Objects.requireNonNull(companies, "companies must not be null");
         this.companies = companies;
     }
 
     public List<Company> getCompanies() {
         return companies;
-    }
-
-    public void setCompanies(List<Company> companies) {
-        this.companies = companies;
     }
 
     @Override
@@ -30,12 +23,12 @@ public class CompanySection extends AbstractSection {
 
         CompanySection that = (CompanySection) o;
 
-        return Objects.equals(companies, that.companies);
+        return companies.equals(that.companies);
     }
 
     @Override
     public int hashCode() {
-        return companies != null ? companies.hashCode() : 0;
+        return companies.hashCode();
     }
 
     @Override

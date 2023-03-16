@@ -4,13 +4,10 @@ import java.util.Objects;
 
 public class TextSection extends AbstractSection {
 
-    private String text;
-
-    public TextSection() {
-        this.text = "";
-    }
+    private final String text;
 
     public TextSection(String text) {
+        Objects.requireNonNull(text, "text must not be null");
         this.text = text;
     }
 
@@ -18,23 +15,19 @@ public class TextSection extends AbstractSection {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TextSection section = (TextSection) o;
+        TextSection that = (TextSection) o;
 
-        return Objects.equals(text, section.text);
+        return text.equals(that.text);
     }
 
     @Override
     public int hashCode() {
-        return text != null ? text.hashCode() : 0;
+        return text.hashCode();
     }
 
     @Override
