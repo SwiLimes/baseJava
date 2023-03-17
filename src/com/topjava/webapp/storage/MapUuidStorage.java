@@ -24,13 +24,12 @@ public class MapUuidStorage extends AbstractStorage<String> {
 
     @Override
     protected String getSearchKey(String uuid) {
-        Resume searchKey = storage.get(uuid);
-        return Objects.isNull(searchKey) ? null : uuid;
+        return uuid;
     }
 
     @Override
-    protected void doSave(Resume r) {
-        storage.put(r.getUuid(), r);
+    protected void doSave(Resume r, String uuid) {
+        storage.put(uuid, r);
     }
 
     @Override

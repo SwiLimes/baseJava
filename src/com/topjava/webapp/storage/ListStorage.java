@@ -33,7 +33,7 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected void doSave(Resume r) {
+    protected void doSave(Resume r, Integer index) {
         storage.add(r);
     }
 

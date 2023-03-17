@@ -17,7 +17,7 @@ public abstract class AbstractStorage<SK> implements Storage {
     public void save(Resume r) {
         LOG.info("Save " + r);
         SK searchKey = getNonExistingSearchKey(r.getUuid());
-        doSave(r);
+        doSave(r, searchKey);
     }
 
     @Override
@@ -70,7 +70,7 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     protected abstract SK getSearchKey(String uuid);
 
-    protected abstract void doSave(Resume r);
+    protected abstract void doSave(Resume r, SK searchKey);
 
     protected abstract void doDelete(SK searchKey);
 
