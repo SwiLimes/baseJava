@@ -7,11 +7,14 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 public class ResumeTestData {
 
-    public static void initResume(Resume resume) {
+    public static Resume createResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+
         Map<ContactType, String> contacts = new EnumMap<ContactType, String>(ContactType.class) {{
             put(ContactType.PHONE, "+7(921) 855-0482");
             put(ContactType.SKYPE, "skype:grigory.kislin");
@@ -74,12 +77,12 @@ public class ResumeTestData {
         }};
 
         resume.setSections(sections);
+        return resume;
     }
 
 
     public static void main(String[] args) {
-        Resume resume = new Resume("Григорий Кислин");
-        initResume(resume);
+        Resume resume = createResume(UUID.randomUUID().toString(), "Григорий Кислин");
 
         System.out.println("UUID: " + resume.getUuid() + " | " + " Name: " + resume.getFullName());
 
