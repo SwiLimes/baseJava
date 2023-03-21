@@ -2,6 +2,7 @@ package com.topjava.webapp;
 
 import com.topjava.webapp.model.*;
 
+import java.time.Month;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
@@ -38,12 +39,12 @@ public class ResumeTestData {
 
         Company javaOnline = new Company("Java Online Projects", "https://javaops.ru/");
         List<Company.Period> javaOnlinePeriods = new ArrayList<Company.Period>() {{
-            add(new Company.Period("01/10/2023", "20/02/2023", "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."));
+            add(new Company.Period(2022, Month.OCTOBER, "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."));
         }};
         javaOnline.setPeriods(javaOnlinePeriods);
         Company wrike = new Company("Wrike", "https://www.wrike.com/");
         List<Company.Period> wrikePeriods = new ArrayList<Company.Period>() {{
-            add(new Company.Period("02/10/2014", "14/01/2016", "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."));
+            add(new Company.Period(2014, Month.OCTOBER, 2016, Month.JANUARY, "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."));
         }};
         wrike.setPeriods(wrikePeriods);
         CompanySection experienceSection = new CompanySection(Arrays.asList(javaOnline, wrike));
@@ -51,18 +52,18 @@ public class ResumeTestData {
 
         Company spbUniversity = new Company("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "https://itmo.ru/");
         List<Company.Period> periods = new ArrayList<Company.Period>() {{
-            add(new Company.Period("01/09/1987", "05/07/1993", "Инженер (программист Fortran, C)"));
-            add(new Company.Period("15/09/1993", "09/07/1996", "Аспирантура (программист С, С++)"));
+            add(new Company.Period(1987, Month.SEPTEMBER, 1993, Month.JULY, "Инженер (программист Fortran, C)", ""));
+            add(new Company.Period(1993, Month.SEPTEMBER, 1996, Month.JULY, "Аспирантура (программист С, С++)", ""));
         }};
         spbUniversity.setPeriods(periods);
         Company coursera = new Company("Coursera", "https://www.coursera.org/course/progfun");
         List<Company.Period> courseraPeriods = new ArrayList<Company.Period>() {{
-            add(new Company.Period("02/03/2011", "15/04/2011", "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'"));
+            add(new Company.Period(2011, Month.MARCH, 2011, Month.APRIL, "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'", ""));
         }};
         coursera.setPeriods(courseraPeriods);
         Company siemens = new Company("Siemens AG", "http://www.siemens.ru/");
         List<Company.Period> siemensPeriods = new ArrayList<Company.Period>() {{
-            add(new Company.Period("04/01/2005", "25/04/2005", "3 месяца обучения мобильным IN сетям (Берлин)"));
+            add(new Company.Period(2005, Month.JANUARY, 2005, Month.APRIL, "3 месяца обучения мобильным IN сетям (Берлин)", ""));
         }};
         siemens.setPeriods(siemensPeriods);
         CompanySection educationSection = new CompanySection(Arrays.asList(spbUniversity, coursera, siemens));

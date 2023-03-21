@@ -1,19 +1,28 @@
 package com.topjava.webapp.model;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.Month;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import static com.topjava.webapp.util.DateUtil.of;
+import static com.topjava.webapp.util.DateUtil.NOW;
 
 public class Company {
     private final String name;
     private final String website;
     private List<Period> periods;
 
-    public Company(String name, String website) {
+    public Company(String name, String website, Period... periods) {
+        this(name, website, Arrays.asList(periods));
+    }
+
+    public Company(String name, String website, List<Period> periods) {
         Objects.requireNonNull(name, "name must not be null");
         this.name = name;
         this.website = website;
+        this.periods = periods;
     }
 
     public String getName() {
@@ -65,18 +74,20 @@ public class Company {
         private final String title;
         private final String description;
 
-        private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        public Period(String startDate, String endDate, String title) {
-            this(startDate, endDate, title, "");
+        public Period(int startYear, Month startMonth, String title, String description) {
+            this(of(startYear, startMonth), NOW, title, description);
         }
 
-        public Period(String startDate, String endDate, String title, String description) {
+        public Period(int startYear, Month startMonth, int endYear, Month endMonth, String title, String description) {
+            this(of(startYear, startMonth), of(endYear, endMonth), title, description);
+        }
+
+        public Period(LocalDate startDate, LocalDate endDate, String title, String description) {
             Objects.requireNonNull(startDate, "startDate must not be null");
             Objects.requireNonNull(endDate, "endDate must not be null");
             Objects.requireNonNull(title, "title must not be null");
-            this.startDate = LocalDate.parse(startDate, formatter);
-            this.endDate = LocalDate.parse(endDate, formatter);
+            this.startDate = startDate;
+            this.endDate = endDate;
             this.title = title;
             this.description = description;
         }

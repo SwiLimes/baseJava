@@ -55,8 +55,16 @@ public class Resume {
         return contacts.get(type);
     }
 
+    public void addContact(ContactType type, String value) {
+        contacts.put(type, value);
+    }
+
     public AbstractSection getSection(SectionType type) {
         return sections.get(type);
+    }
+
+    public void addSection(SectionType type, AbstractSection section) {
+        sections.put(type, section);
     }
 
     @Override
