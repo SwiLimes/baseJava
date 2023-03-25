@@ -1,5 +1,6 @@
 package com.topjava.webapp.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.Map;
@@ -8,9 +9,9 @@ import java.util.EnumMap;
 /**
  * Initial resume class
  */
-public class Resume {
+public class Resume implements Serializable {
 
-    // Unique identifier
+    private static final long serialVersionUID = 1L;
     private final String uuid;
     private final String fullName;
     private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
