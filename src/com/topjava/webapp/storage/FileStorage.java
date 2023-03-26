@@ -2,6 +2,7 @@ package com.topjava.webapp.storage;
 
 import com.topjava.webapp.exception.StorageException;
 import com.topjava.webapp.model.Resume;
+import com.topjava.webapp.storage.strategy.SerializableStrategy;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File> {
+
     private final File directory;
 
     private final SerializableStrategy strategy;
@@ -33,11 +35,7 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("directory is empty", directory.getAbsolutePath());
-        }
-        for (File file : files) {
+        for (File file : getFilesList()) {
             doDelete(file);
         }
     }
@@ -45,11 +43,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected List<Resume> doCopyAll() {
         List<Resume> resumes = new ArrayList<>();
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("directory is empty", directory.getAbsolutePath());
-        }
-        for (File file : files) {
+        for (File file : getFilesList()) {
             resumes.add(doGet(file));
         }
         return resumes;
@@ -57,11 +51,7 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        String[] files = directory.list();
-        if (files == null) {
-            throw new StorageException("directory is empty", directory.getAbsolutePath());
-        }
-        return files.length;
+        return getFilesList().length;
     }
 
     @Override
@@ -81,8 +71,7 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doDelete(File file) {
-        boolean deleted = file.delete();
-        if (!deleted) {
+        if (!file.delete()) {
             throw new StorageException("File not deleted", file.getAbsolutePath());
         }
     }
@@ -108,5 +97,13 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected boolean isExist(File file) {
         return file.exists();
+    }
+
+    private File[] getFilesList() {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("directory is empty", directory.getAbsolutePath());
+        }
+        return files;
     }
 }

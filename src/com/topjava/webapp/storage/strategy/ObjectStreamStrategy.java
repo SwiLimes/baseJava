@@ -1,9 +1,13 @@
-package com.topjava.webapp.storage;
+package com.topjava.webapp.storage.strategy;
 
 import com.topjava.webapp.exception.StorageException;
 import com.topjava.webapp.model.Resume;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
 
 public class ObjectStreamStrategy implements SerializableStrategy {
 

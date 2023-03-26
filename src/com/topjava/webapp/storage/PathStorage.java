@@ -2,6 +2,7 @@ package com.topjava.webapp.storage;
 
 import com.topjava.webapp.exception.StorageException;
 import com.topjava.webapp.model.Resume;
+import com.topjava.webapp.storage.strategy.SerializableStrategy;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -34,34 +35,22 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        try (Stream<Path> files = Files.list(directory)) {
-            files.forEach(this::doDelete);
-        } catch (IOException e) {
-            throw new StorageException("Path clear error", directory.getFileName().toString(), e);
-        }
+        getPathsList().forEach(this::doDelete);
     }
 
     @Override
     public int size() {
-        try (Stream<Path> files = Files.list(directory)){
-            return (int) files.count();
-        } catch (IOException e) {
-            throw new StorageException("Path size error", directory.getFileName().toString(), e);
-        }
+        return (int) getPathsList().count();
     }
 
     @Override
     protected List<Resume> doCopyAll() {
-        try (Stream<Path> files = Files.list(directory)) {
-            return files.map(this::doGet).collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new StorageException("Path doCopyAll error", directory.toAbsolutePath().toString(), e);
-        }
+        return getPathsList().map(this::doGet).collect(Collectors.toList());
     }
 
     @Override
     protected Path getSearchKey(String uuid) {
-        return Paths.get(directory + "/" + uuid);
+        return directory.resolve(uuid);
     }
 
     @Override
@@ -104,5 +93,13 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected boolean isExist(Path path) {
         return Files.exists(path);
+    }
+
+    private Stream<Path> getPathsList() {
+        try {
+            return Files.list(directory);
+        } catch (IOException e) {
+            throw new StorageException("directory is empty", directory.getFileName().toString(), e);
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.topjava.webapp.storage;
+package com.topjava.webapp.storage.strategy;
 
 import com.topjava.webapp.model.Resume;
 
