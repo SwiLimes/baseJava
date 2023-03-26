@@ -5,11 +5,7 @@ import com.topjava.webapp.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamStorage extends AbstractFileStorage {
-
-    public ObjectStreamStorage(File directory) {
-        super(directory);
-    }
+public class ObjectStreamStrategy implements SerializableStrategy {
 
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {
