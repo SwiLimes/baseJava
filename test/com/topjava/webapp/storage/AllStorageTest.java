@@ -11,7 +11,8 @@ import org.junit.platform.suite.api.SelectClasses;
         MapResumeStorageTest.class,
         MapUuidStorageTest.class,
         FileStorageTest.class,
-        PathStorageTest.class
+        PathStorageTest.class,
+        XmlPathStorageTest.class
 })
 
 public class AllStorageTest {

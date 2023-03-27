@@ -58,7 +58,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.createFile(path);
         } catch (IOException e) {
-            throw new StorageException("Could not create Path " + path.toAbsolutePath(), path.getFileName().toString(), e);
+            throw new StorageException("Could not create Path " + path.toAbsolutePath(), getFileName(path), e);
         }
         doUpdate(path, r);
     }
@@ -68,7 +68,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.delete(path);
         } catch (IOException e) {
-            throw new StorageException("Path delete error", path.getFileName().toString(), e);
+            throw new StorageException("Path delete error", getFileName(path), e);
         }
     }
 
@@ -86,7 +86,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             return strategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("Path read error", path.getFileName().toString(), e);
+            throw new StorageException("Path read error", getFileName(path), e);
         }
     }
 
@@ -99,7 +99,11 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("directory is empty", directory.getFileName().toString(), e);
+            throw new StorageException("directory is empty", e);
         }
+    }
+
+    private String getFileName(Path path) {
+        return path.getFileName().toString();
     }
 }
