@@ -16,8 +16,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class DataStreamStrategy implements SerializableStrategy {
 
@@ -27,44 +27,30 @@ public class DataStreamStrategy implements SerializableStrategy {
             dos.writeUTF(r.getUuid());
             dos.writeUTF(r.getFullName());
 
-            Map<ContactType, String> contacts = r.getContacts();
-            dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue());
-            }
+            writeCollection(r.getContacts().entrySet(), dos, contact -> {
+                dos.writeUTF(contact.getKey().name());
+                dos.writeUTF(contact.getValue());
+            });
 
-            Map<SectionType, AbstractSection> sections = r.getSections();
-            dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                switch (entry.getKey()) {
-                    case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) entry.getValue()).getText());
-                    case ACHIEVEMENT, QUALIFICATIONS -> {
-                        List<String> items = ((ListSection) entry.getValue()).getItems();
-                        dos.writeInt(items.size());
-                        for (String item : items) {
-                            dos.writeUTF(item);
-                        }
-                    }
-                    case EXPERIENCE, EDUCATION -> {
-                        List<Company> companies = ((CompanySection) entry.getValue()).getCompanies();
-                        dos.writeInt(companies.size());
-                        for (Company company : companies) {
-                            dos.writeUTF(company.getName());
-                            dos.writeUTF(company.getWebsite());
-                            List<Company.Period> periods = company.getPeriods();
-                            dos.writeInt(periods.size());
-                            for (Company.Period period : periods) {
-                                dos.writeUTF(period.getStartDate().toString());
-                                dos.writeUTF(period.getEndDate().toString());
-                                dos.writeUTF(period.getTitle());
-                                dos.writeUTF(period.getDescription());
-                            }
-                        }
-                    }
+            writeCollection(r.getSections().entrySet(), dos, section -> {
+                SectionType sectionType = section.getKey();
+                AbstractSection abstractSection = section.getValue();
+                dos.writeUTF(sectionType.name());
+                switch (sectionType) {
+                    case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) abstractSection).getText());
+                    case ACHIEVEMENT, QUALIFICATIONS -> writeCollection(((ListSection) abstractSection).getItems(), dos, dos::writeUTF);
+                    case EXPERIENCE, EDUCATION -> writeCollection(((CompanySection) abstractSection).getCompanies(), dos, company -> {
+                        dos.writeUTF(company.getName());
+                        dos.writeUTF(company.getWebsite());
+                        writeCollection(company.getPeriods(), dos, period -> {
+                            dos.writeUTF(period.getStartDate().toString());
+                            dos.writeUTF(period.getEndDate().toString());
+                            dos.writeUTF(period.getTitle());
+                            dos.writeUTF(period.getDescription());
+                        });
+                    });
                 }
-            }
+            });
         }
     }
 
@@ -109,5 +95,17 @@ public class DataStreamStrategy implements SerializableStrategy {
             }
             return resume;
         }
+    }
+
+    private <T> void writeCollection(Collection<T> collection, DataOutputStream dos, ThrowableConsumer<T> consumer) throws IOException {
+        dos.writeInt(collection.size());
+        for (T t : collection) {
+            consumer.write(t);
+        }
+    }
+
+    @FunctionalInterface
+    public interface ThrowableConsumer<T> {
+        void write(T t) throws IOException;
     }
 }
