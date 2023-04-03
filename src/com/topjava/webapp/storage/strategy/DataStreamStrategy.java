@@ -58,54 +58,63 @@ public class DataStreamStrategy implements SerializableStrategy {
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
             Resume resume = new Resume(dis.readUTF(), dis.readUTF());
-            int contactsSize = dis.readInt();
-            for (int c = 0; c < contactsSize; c++) {
-                resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
-            int sectionsSize = dis.readInt();
-            for (int s = 0; s < sectionsSize; s++) {
-                SectionType type = SectionType.valueOf(dis.readUTF());
-                switch (type) {
-                    case PERSONAL, OBJECTIVE -> resume.addSection(type, new TextSection(dis.readUTF()));
-                    case ACHIEVEMENT, QUALIFICATIONS -> {
-                        int itemsSize = dis.readInt();
-                        List<String> items = new ArrayList<>(itemsSize);
-                        for (int i = 0; i < itemsSize; i++) {
-                            items.add(dis.readUTF());
-                        }
-                        resume.addSection(type, new ListSection(items));
-                    }
-                    case EXPERIENCE, EDUCATION -> {
-                        int companiesSize = dis.readInt();
-                        List<Company> companies = new ArrayList<>(companiesSize);
-                        for (int c = 0; c < companiesSize; c++) {
-                            String name = dis.readUTF();
-                            String website = dis.readUTF();
-                            int periodsSize = dis.readInt();
-                            List<Company.Period> periods = new ArrayList<>(periodsSize);
-                            for (int p = 0; p < periodsSize; p++) {
-                                periods.add(new Company.Period(LocalDate.parse(dis.readUTF()),
-                                        LocalDate.parse(dis.readUTF()), dis.readUTF(), dis.readUTF()));
-                            }
-                            companies.add(new Company(name, website, periods));
-                        }
-                        resume.addSection(type, new CompanySection(companies));
-                    }
-                }
-            }
+            readMap(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+
+            readMap(dis, () -> {
+                SectionType sectionType = SectionType.valueOf(dis.readUTF());
+                resume.addSection(sectionType, readSection(dis, sectionType));
+            });
+
             return resume;
         }
     }
 
-    private <T> void writeCollection(Collection<T> collection, DataOutputStream dos, ThrowableConsumer<T> consumer) throws IOException {
+    private <T> void writeCollection(Collection<T> collection, DataOutputStream dos, ItemWriter<T> consumer) throws IOException {
         dos.writeInt(collection.size());
         for (T t : collection) {
             consumer.write(t);
         }
     }
 
+    private void readMap(DataInputStream dis, ItemHandler handler) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            handler.handle();
+        }
+    }
+
+    private AbstractSection readSection(DataInputStream dis, SectionType sectionType) throws IOException {
+        return switch (sectionType) {
+            case PERSONAL, OBJECTIVE -> new TextSection(dis.readUTF());
+            case ACHIEVEMENT, QUALIFICATIONS -> new ListSection(readList(dis, dis::readUTF));
+            case EXPERIENCE, EDUCATION -> new CompanySection(readList(dis,
+                    () -> new Company(dis.readUTF(), dis.readUTF(), readList(dis,
+                            () -> new Company.Period(LocalDate.parse(dis.readUTF()), LocalDate.parse(dis.readUTF()), dis.readUTF(), dis.readUTF())
+                    ))));
+        };
+    }
+
+    private <T> List<T> readList(DataInputStream dis, ItemReader<T> reader) throws IOException {
+        int listSize = dis.readInt();
+        List<T> list = new ArrayList<>(listSize);
+        for (int i = 0; i < listSize; i++) {
+            list.add(reader.read());
+        }
+        return list;
+    }
+
     @FunctionalInterface
-    public interface ThrowableConsumer<T> {
+    public interface ItemHandler {
+        void handle() throws IOException;
+    }
+
+    @FunctionalInterface
+    public interface ItemWriter<T> {
         void write(T t) throws IOException;
+    }
+
+    @FunctionalInterface
+    public interface ItemReader<T> {
+        T read() throws IOException;
     }
 }
