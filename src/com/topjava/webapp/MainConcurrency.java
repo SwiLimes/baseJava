@@ -55,24 +55,18 @@ class Deadlock {
     private static final String secondStr = "second string";
 
     public static void main(String[] args) {
-        Thread firstThread = new Thread(() -> {
-            synchronized (firstStr) {
-                System.out.println("firstThread lock resource 'firstStr'");
-                synchronized (secondStr) {
-                    System.out.println("firstThread lock resource 'secondStr'");
-                }
-            }
-        });
-        Thread secondThread = new Thread(() -> {
-            synchronized (secondStr) {
-                System.out.println("secondThread lock resource 'secondStr'");
-                synchronized (firstStr) {
-                    System.out.println("secondThread lock resource 'firstStr'");
-                }
-            }
-        });
+        createThread(firstStr, secondStr).start();
+        createThread(secondStr, firstStr).start();
+    }
 
-        firstThread.start();
-        secondThread.start();
+    private static <T> Thread createThread(T res1, T res2) {
+        return new Thread(() -> {
+            synchronized (res1) {
+                System.out.println("lock resource 'res1' - " + res1);
+                synchronized (res2) {
+                    System.out.println("lock resource 'res2' - " + res2);
+                }
+            }
+        });
     }
 }
