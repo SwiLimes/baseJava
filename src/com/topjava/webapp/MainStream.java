@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class MainStream {
     public static void main(String[] args) {
@@ -15,14 +14,10 @@ public class MainStream {
     }
 
     public static int minValue(int[] values) {
-        int[] ints = Arrays.stream(values)
+        return Arrays.stream(values)
                 .distinct()
                 .sorted()
-                .toArray();
-
-        return IntStream.range(0, ints.length)
-                .map(i -> (int) (ints[i] * Math.pow(10, ints.length - i - 1)))
-                .sum();
+                .reduce(0, (accum, elem) -> accum * 10 + elem);
     }
 
     public static List<Integer> oddOrEven(List<Integer> integers) {
