@@ -1,5 +1,6 @@
 package com.topjava.webapp.storage;
 
+import com.topjava.webapp.Config;
 import com.topjava.webapp.exception.ExistStorageException;
 import com.topjava.webapp.exception.NotExistStorageException;
 import com.topjava.webapp.model.Resume;
@@ -11,32 +12,38 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static com.topjava.webapp.ResumeTestData.createResume;
 
 public class AbstractStorageTest {
-    protected static final File STORAGE_DIR = new File("/Users/nikitaberdennikov/IdeaProjects/baseJava/storage");
+    protected static final File STORAGE_DIR = Config.get().getStorageDir();
 
     protected final Storage storage;
 
-    private static final String UUID1 = "uuid1";
+    private static final String UUID1 = UUID.randomUUID().toString();
     private static final String NAME1 = "name1";
 
-    private static final String UUID2 = "uuid2";
+    private static final String UUID2 = UUID.randomUUID().toString();
     private static final String NAME2 = "name2";
 
-    private static final String UUID3 = "uuid3";
+    private static final String UUID3 = UUID.randomUUID().toString();
     private static final String NAME3 = "name3";
 
-    private static final String UUID4 = "uuid4";
+    private static final String UUID4 = UUID.randomUUID().toString();
     private static final String NAME4 = "name4";
 
     private static final String UUID_NOT_EXIST = "Fake";
 
-    private static final Resume RESUME_1 = createResume(UUID1, NAME1);
-    private static final Resume RESUME_2 = createResume(UUID2, NAME2);
-    private static final Resume RESUME_3 = createResume(UUID3, NAME3);
-    private static final Resume RESUME_4 = createResume(UUID4, NAME4);
+    private static final Resume RESUME_1 = new Resume(UUID1, NAME1);
+    private static final Resume RESUME_2 = new Resume(UUID2, NAME2);
+    private static final Resume RESUME_3 = new Resume(UUID3, NAME3);
+    private static final Resume RESUME_4 = new Resume(UUID4, NAME4);
+
+//    private static final Resume RESUME_1 = createResume(UUID1, NAME1);
+//    private static final Resume RESUME_2 = createResume(UUID2, NAME2);
+//    private static final Resume RESUME_3 = createResume(UUID3, NAME3);
+//    private static final Resume RESUME_4 = createResume(UUID4, NAME4);
 
 
     public AbstractStorageTest(Storage storage) {
