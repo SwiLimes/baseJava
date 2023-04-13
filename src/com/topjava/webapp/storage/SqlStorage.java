@@ -1,6 +1,5 @@
 package com.topjava.webapp.storage;
 
-import com.topjava.webapp.exception.ExistStorageException;
 import com.topjava.webapp.exception.NotExistStorageException;
 import com.topjava.webapp.model.Resume;
 import com.topjava.webapp.sql.SqlHelper;
@@ -31,9 +30,7 @@ public class SqlStorage implements Storage {
             String uuid = r.getUuid();
             ps.setString(1, uuid);
             ps.setString(2, r.getFullName());
-            if (ps.executeUpdate() == 0) {
-                throw new ExistStorageException(uuid);
-            }
+            ps.execute();
             return null;
         });
     }
