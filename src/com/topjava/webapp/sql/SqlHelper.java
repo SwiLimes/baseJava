@@ -1,7 +1,6 @@
 package com.topjava.webapp.sql;
 
 
-import com.topjava.webapp.exception.ExistStorageException;
 import com.topjava.webapp.exception.StorageException;
 
 import java.sql.Connection;
@@ -20,9 +19,22 @@ public class SqlHelper {
              PreparedStatement ps = connection.prepareStatement(query)) {
             return executor.execute(ps);
         } catch (SQLException e) {
-            if ("23505".equals(e.getSQLState())) {
-                throw new ExistStorageException(null);
+            throw ExceptionUtil.convertException(e);
+        }
+    }
+
+    public <T> T transactionExecute(SqlTransaction<T> executor) {
+        try (Connection connection = connectionFactory.getConnection()) {
+            try {
+                connection.setAutoCommit(false);
+                T result = executor.execute(connection);
+                connection.commit();
+                return result;
+            } catch (SQLException e) {
+                connection.rollback();
+                throw ExceptionUtil.convertException(e);
             }
+        } catch (SQLException e) {
             throw new StorageException(e);
         }
     }

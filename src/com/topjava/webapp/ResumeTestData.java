@@ -23,7 +23,7 @@ public class ResumeTestData {
         }};
         resume.setContacts(contacts);
 
-        TextSection personalSection = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
+        /*TextSection personalSection = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
 
         TextSection objectiveSection = new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
 
@@ -77,7 +77,7 @@ public class ResumeTestData {
             put(SectionType.EDUCATION, educationSection);
         }};
 
-        resume.setSections(sections);
+        resume.setSections(sections);*/
         return resume;
     }
 

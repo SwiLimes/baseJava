@@ -35,15 +35,10 @@ public class AbstractStorageTest {
 
     private static final String UUID_NOT_EXIST = "Fake";
 
-    private static final Resume RESUME_1 = new Resume(UUID1, NAME1);
-    private static final Resume RESUME_2 = new Resume(UUID2, NAME2);
-    private static final Resume RESUME_3 = new Resume(UUID3, NAME3);
-    private static final Resume RESUME_4 = new Resume(UUID4, NAME4);
-
-//    private static final Resume RESUME_1 = createResume(UUID1, NAME1);
-//    private static final Resume RESUME_2 = createResume(UUID2, NAME2);
-//    private static final Resume RESUME_3 = createResume(UUID3, NAME3);
-//    private static final Resume RESUME_4 = createResume(UUID4, NAME4);
+    private static final Resume RESUME_1 = createResume(UUID1, NAME1);
+    private static final Resume RESUME_2 = createResume(UUID2, NAME2);
+    private static final Resume RESUME_3 = createResume(UUID3, NAME3);
+    private static final Resume RESUME_4 = createResume(UUID4, NAME4);
 
 
     public AbstractStorageTest(Storage storage) {
