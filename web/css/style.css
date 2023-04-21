@@ -1,0 +1,19 @@
+header {
+    background: none repeat scroll 0 0 GREEN;
+    color: darkkhaki;
+    font-size: 25px;
+    padding: 5px 20px;
+}
+
+h1 {
+    color: darkgreen;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+}
+
+footer {
+    background: none repeat scroll 0 0 GREEN;
+    color: darkkhaki;
+    font-size: 25px;
+    padding: 5px 20px;
+}
