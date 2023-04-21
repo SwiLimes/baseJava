@@ -16,14 +16,14 @@ public class ResumeTestData {
     public static Resume createResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-        Map<ContactType, String> contacts = new EnumMap<ContactType, String>(ContactType.class) {{
+        Map<ContactType, String> contacts = new EnumMap<>(ContactType.class) {{
             put(ContactType.PHONE, "+7(921) 855-0482");
             put(ContactType.SKYPE, "skype:grigory.kislin");
             put(ContactType.EMAIL, "gkislin@yandex.ru");
         }};
         resume.setContacts(contacts);
 
-        /*TextSection personalSection = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
+        TextSection personalSection = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
 
         TextSection objectiveSection = new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
 
@@ -37,7 +37,7 @@ public class ResumeTestData {
                 "Version control: Subversion, Git, Mercury, ClearCase, Perforce"
         ));
 
-        Company javaOnline = new Company("Java Online Projects", "https://javaops.ru/");
+        /*Company javaOnline = new Company("Java Online Projects", "https://javaops.ru/");
         List<Company.Period> javaOnlinePeriods = new ArrayList<Company.Period>() {{
             add(new Company.Period(2022, Month.OCTOBER, "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."));
         }};
@@ -67,17 +67,17 @@ public class ResumeTestData {
         }};
         siemens.setPeriods(siemensPeriods);
         CompanySection educationSection = new CompanySection(Arrays.asList(spbUniversity, coursera, siemens));
-
-        Map<SectionType, AbstractSection> sections = new EnumMap<SectionType, AbstractSection>(SectionType.class) {{
+*/
+        Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class) {{
             put(SectionType.PERSONAL, personalSection);
             put(SectionType.OBJECTIVE, objectiveSection);
             put(SectionType.ACHIEVEMENT, achievementsSection);
             put(SectionType.QUALIFICATIONS, qualificationsSection);
-            put(SectionType.EXPERIENCE, experienceSection);
-            put(SectionType.EDUCATION, educationSection);
+            //put(SectionType.EXPERIENCE, experienceSection);
+            //put(SectionType.EDUCATION, educationSection);
         }};
 
-        resume.setSections(sections);*/
+        resume.setSections(sections);
         return resume;
     }
 
