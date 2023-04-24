@@ -1,22 +1,30 @@
 package com.topjava.webapp.web;
 
+import com.topjava.webapp.Config;
 import com.topjava.webapp.ResumeTestData;
 import com.topjava.webapp.model.Resume;
-import com.topjava.webapp.storage.ArrayStorage;
 import com.topjava.webapp.storage.Storage;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.UUID;
 
 public class ResumeServlet extends HttpServlet {
-    private static final Storage storage = new ArrayStorage();
+    private static  Storage storage;
 
-    static {
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new ServletException(e);
+        }
+        storage = Config.get().getStorage();
+        storage.clear();
         storage.save(ResumeTestData.createResume(UUID.randomUUID().toString(), "name1"));
         storage.save(ResumeTestData.createResume(UUID.randomUUID().toString(), "name2"));
         storage.save(ResumeTestData.createResume(UUID.randomUUID().toString(), "name3"));
@@ -33,11 +41,10 @@ public class ResumeServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
 
-        String uuid = req.getParameter("uuid");
-        resp.getWriter().write(getResumesTableMarkup(resp.getWriter(), uuid));
+        resp.getWriter().write(getResumesTableMarkup(req.getParameter("uuid")));
     }
 
-    private String getResumesTableMarkup(PrintWriter writer, String uuid) {
+    private String getResumesTableMarkup(String uuid) {
         StringBuilder sb = new StringBuilder();
         sb.append("<html<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +

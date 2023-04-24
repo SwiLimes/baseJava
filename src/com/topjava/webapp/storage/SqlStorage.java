@@ -205,7 +205,7 @@ public class SqlStorage implements Storage {
                 ps.setString(2, type.name());
                 switch (type) {
                     case PERSONAL, OBJECTIVE -> ps.setString(3, ((TextSection) section.getValue()).getText());
-                    case ACHIEVEMENT, QUALIFICATIONS -> ps.setString(3, ((ListSection) section.getValue()).getItems().stream().reduce("", (res, str) -> res + str + "\n"));
+                    case ACHIEVEMENT, QUALIFICATIONS -> ps.setString(3, String.join("\n", ((ListSection) section.getValue()).getItems()));
                     default -> {
                     }
                 }
