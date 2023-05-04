@@ -13,34 +13,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
-
-import static com.topjava.webapp.ResumeTestData.createResume;
+import static com.topjava.webapp.ResumeTestData.*;
 
 public class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
 
     protected final Storage storage;
-
-    private static final String UUID1 = UUID.randomUUID().toString();
-    private static final String NAME1 = "name1";
-
-    private static final String UUID2 = UUID.randomUUID().toString();
-    private static final String NAME2 = "name2";
-
-    private static final String UUID3 = UUID.randomUUID().toString();
-    private static final String NAME3 = "name3";
-
-    private static final String UUID4 = UUID.randomUUID().toString();
-    private static final String NAME4 = "name4";
-
-    private static final String UUID_NOT_EXIST = "Fake";
-
-    private static final Resume RESUME_1 = createResume(UUID1, NAME1);
-    private static final Resume RESUME_2 = createResume(UUID2, NAME2);
-    private static final Resume RESUME_3 = createResume(UUID3, NAME3);
-    private static final Resume RESUME_4 = createResume(UUID4, NAME4);
-
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
