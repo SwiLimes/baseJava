@@ -18,11 +18,8 @@ public class ResumeServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new ServletException(e);
-        }
+        super.init(config);
+
         storage = Config.get().getStorage();
         storage.clear();
         storage.save(ResumeTestData.createResume(UUID.randomUUID().toString(), "name1"));
