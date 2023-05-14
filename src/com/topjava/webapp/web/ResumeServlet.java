@@ -2,6 +2,7 @@ package com.topjava.webapp.web;
 
 import com.topjava.webapp.Config;
 import com.topjava.webapp.ResumeTestData;
+import com.topjava.webapp.model.ContactType;
 import com.topjava.webapp.model.Resume;
 import com.topjava.webapp.storage.Storage;
 
@@ -29,49 +30,45 @@ public class ResumeServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.setCharacterEncoding("UTF-8");
+        String uuid = req.getParameter("uuid");
+        String fullName = req.getParameter("fullName");
+        Resume resume = new Resume(uuid, fullName);
+        for (ContactType type : ContactType.values()) {
+            String value = req.getParameter(type.name());
+            if (value != null && value.trim().length() != 0) {
+                resume.addContact(type, value);
+            } else {
+                resume.getContacts().remove(type);
+            }
+        }
+        storage.update(resume);
+        resp.sendRedirect("resume");
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html; charset=UTF-8");
-
-        resp.getWriter().write(getResumesTableMarkup(req.getParameter("uuid")));
-    }
-
-    private String getResumesTableMarkup(String uuid) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<html<!DOCTYPE html>\n" +
-                "<html lang=\"en\">\n" +
-                "<head>\n" +
-                "    <meta charset=\"UTF-8\">\n" +
-                "    <link rel=\"stylesheet\" href=\"css/resumes-table.css\">\n" +
-                "    <title>Title</title>\n" +
-                "</head>\n" +
-                "<body>\n" +
-                "<table>\n" +
-                "<tr>\n" +
-                "<th>UUID</th>\n" +
-                "<th>Full Name</th>\n" +
-                "</tr>\n");
-        if (uuid != null) {
-            sb.append(getResumeMarkup(storage.get(uuid)));
-        } else {
-            storage.getAllSorted().forEach(resume -> sb.append(getResumeMarkup(resume)));
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String uuid = req.getParameter("uuid");
+        String action = req.getParameter("action");
+        if (action == null) {
+            req.setAttribute("resumes", storage.getAllSorted());
+            req.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(req, resp);
+            return;
         }
-        sb.append("</table>\n" +
-                "</body>\n" +
-                "</html>");
 
-        return sb.toString();
-    }
+        Resume resume;
+        switch (action) {
+            case "delete" -> {
+                storage.delete(uuid);
+                resp.sendRedirect("resume");
+                return;
+            }
+            case "view", "edit" -> resume = storage.get(uuid);
+            default -> throw new IllegalArgumentException("Action " + action + " is illegal");
+        }
 
-    private String getResumeMarkup(Resume resume) {
-        return "<tr>\n" +
-                "<td>" + resume.getUuid() + "</td>\n" +
-                "<td>" + resume.getFullName() + "</td>\n" +
-                "</tr>\n";
+        req.setAttribute("resume", resume);
+        req.getRequestDispatcher("view".equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp").forward(req, resp);
     }
 }

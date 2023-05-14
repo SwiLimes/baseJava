@@ -1,19 +1,69 @@
 header {
-    background: none repeat scroll 0 0 GREEN;
-    color: darkkhaki;
+    background: none repeat scroll 0 0 darkcyan;
+    color: black;
     font-size: 25px;
     padding: 5px 20px;
-}
-
-h1 {
-    color: darkgreen;
-    font-family: Arial, sans-serif;
-    font-size: 15px;
+    text-align: center;
 }
 
 footer {
-    background: none repeat scroll 0 0 GREEN;
-    color: darkkhaki;
+    background: none repeat scroll 0 0 darkcyan;
+    color: black;
     font-size: 25px;
     padding: 5px 20px;
+    text-align: center;
+}
+
+section {
+    width: 900px;
+    margin: auto;
+}
+
+table {
+    margin: auto;
+
+}
+
+th {
+    background-color: gray;
+    color: white;
+}
+
+th, td {
+    border-bottom: 1px solid grey;
+    padding: 10px;
+    text-align: center;
+    font-size: 15px;
+    font-family: Arial sans-serif;
+}
+
+dl {
+    background: none repeat scroll 0 0 white;
+    margin: 8px 0;
+    padding: 0;
+}
+
+dt {
+    display: inline-block;
+    width: 170px;
+}
+
+dd {
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: top;
+}
+
+h2, h3 {
+    margin: 15px 0;
+}
+
+a[href^="skype:"] {
+    padding-left: 20px !important;
+    background: url("../img/skype.png") no-repeat center left;
+}
+
+a[href^="mailto:"] {
+    padding-left: 20px !important;
+    background: url("../img/email.png") no-repeat center left;
 }
