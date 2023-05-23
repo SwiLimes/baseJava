@@ -19,22 +19,35 @@ section {
     margin: auto;
 }
 
-table {
+#resumes_table {
     margin: auto;
 
 }
 
-th {
+#resumes_table th {
     background-color: gray;
     color: white;
 }
 
-th, td {
+#resumes_table th, td{
     border-bottom: 1px solid grey;
     padding: 10px;
     text-align: center;
     font-size: 15px;
     font-family: Arial sans-serif;
+}
+
+
+#sections_table td {
+    border: none;
+    padding: 10px;
+    text-align: left;
+    font-size: 15px;
+    font-family: Arial sans-serif;
+}
+
+#sections_table #dates {
+    width: 20%;
 }
 
 dl {

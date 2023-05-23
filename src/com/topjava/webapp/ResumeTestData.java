@@ -106,6 +106,56 @@ public class ResumeTestData {
         return resume;
     }
 
+    public static Resume createResume2(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+
+        TextSection personalSection = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
+
+        ListSection achievementsSection = new ListSection(Arrays.asList(
+                "Организация команды и успешная реализация Java проектов для сторонних заказчиков: приложения автопарк на стеке Spring Cloud/микросервисы, система мониторинга показателей спортсменов на Spring Boot, участие в проекте МЭШ на Play-2, многомодульный Spring Boot + Vaadin проект для комплексных DIY смет",
+                "С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise", "Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA). Организация онлайн стажировок и ведение проектов. Более 3500 выпускников."
+        ));
+
+        Company javaOnline = new Company("Java Online Projects", "https://javaops.ru/");
+        List<Company.Period> javaOnlinePeriods = new ArrayList<>() {{
+            add(new Company.Period(2022, Month.OCTOBER, "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."));
+        }};
+        javaOnline.setPeriods(javaOnlinePeriods);
+        Company wrike = new Company("Wrike", "https://www.wrike.com/");
+        List<Company.Period> wrikePeriods = new ArrayList<>() {{
+            add(new Company.Period(2014, Month.OCTOBER, 2016, Month.JANUARY, "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."));
+        }};
+        wrike.setPeriods(wrikePeriods);
+        CompanySection experienceSection = new CompanySection(Arrays.asList(javaOnline, wrike));
+
+
+        Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class) {{
+            put(SectionType.PERSONAL, personalSection);
+            put(SectionType.ACHIEVEMENT, achievementsSection);
+            put(SectionType.EXPERIENCE, experienceSection);
+        }};
+
+        resume.setSections(sections);
+        return resume;
+    }
+
+    public static Resume createResume3(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+
+        Map<ContactType, String> contacts = new EnumMap<>(ContactType.class) {{
+            put(ContactType.PHONE, "+7(921) 855-0482");
+            put(ContactType.SKYPE, "skype:grigory.kislin");
+            put(ContactType.EMAIL, "gkislin@yandex.ru");
+        }};
+        resume.setContacts(contacts);
+
+        return resume;
+    }
+
+    public static Resume createResume4(String uuid, String fullName) {
+        return new Resume(uuid, fullName);
+    }
+
 
     public static void main(String[] args) {
         Resume resume = createResume(UUID.randomUUID().toString(), "Григорий Кислин");

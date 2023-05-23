@@ -3,7 +3,10 @@ package com.topjava.webapp.web;
 import com.topjava.webapp.Config;
 import com.topjava.webapp.ResumeTestData;
 import com.topjava.webapp.model.ContactType;
+import com.topjava.webapp.model.ListSection;
 import com.topjava.webapp.model.Resume;
+import com.topjava.webapp.model.SectionType;
+import com.topjava.webapp.model.TextSection;
 import com.topjava.webapp.storage.Storage;
 
 import javax.servlet.ServletConfig;
@@ -24,9 +27,9 @@ public class ResumeServlet extends HttpServlet {
         storage = Config.get().getStorage();
         storage.clear();
         storage.save(ResumeTestData.createResume(UUID.randomUUID().toString(), "name1"));
-        storage.save(ResumeTestData.createResume(UUID.randomUUID().toString(), "name2"));
-        storage.save(ResumeTestData.createResume(UUID.randomUUID().toString(), "name3"));
-        storage.save(ResumeTestData.createResume(UUID.randomUUID().toString(), "name4"));
+        storage.save(ResumeTestData.createResume2(UUID.randomUUID().toString(), "name2"));
+        storage.save(ResumeTestData.createResume3(UUID.randomUUID().toString(), "name3"));
+        storage.save(ResumeTestData.createResume4(UUID.randomUUID().toString(), "name4"));
     }
 
     @Override
@@ -41,6 +44,18 @@ public class ResumeServlet extends HttpServlet {
                 resume.addContact(type, value);
             } else {
                 resume.getContacts().remove(type);
+            }
+        }
+        for (SectionType type : SectionType.values()) {
+            String value = req.getParameter(type.name());
+            if (value != null && value.trim().length() != 0) {
+                resume.addSection(type, switch (type) {
+                    case PERSONAL, OBJECTIVE -> new TextSection(value);
+                    case ACHIEVEMENT, QUALIFICATIONS -> new ListSection(value.split("\n"));
+                    case EXPERIENCE, EDUCATION -> new TextSection("miss");
+                });
+            } else {
+                resume.getSections().remove(type);
             }
         }
         storage.update(resume);

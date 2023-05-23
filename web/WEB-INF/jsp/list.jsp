@@ -11,7 +11,7 @@
 <body>
 <jsp:include page="/WEB-INF/jsp/fragments/header.jsp"/>
 <section>
-    <table>
+    <table id="resumes_table">
         <tr>
             <th>Имя</th>
             <th>Email</th>
