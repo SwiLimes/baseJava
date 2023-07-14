@@ -1,6 +1,8 @@
 <%@ page import="com.topjava.webapp.model.ContactType" %>
 <%@ page import="com.topjava.webapp.model.SectionType" %>
 <%@ page import="com.topjava.webapp.model.ListSection" %>
+<%@ page import="com.topjava.webapp.model.CompanySection" %>
+<%@ page import="com.topjava.webapp.util.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="resume" scope="request" type="com.topjava.webapp.model.Resume"/>
@@ -37,7 +39,7 @@
         <h2>Секции:</h2>
         <c:forEach var="type" items="<%=SectionType.values()%>">
             <c:set var="section" value="${resume.getSection(type)}"/>
-            <jsp:useBean id="section" type="com.topjava.webapp.model.AbstractSection" scope="session"/>
+            <jsp:useBean id="section" type="com.topjava.webapp.model.AbstractSection"/>
             <dl>
                 <h3>${type.title}</h3>
                 <c:choose>
@@ -53,6 +55,66 @@
                         </label>
                     </c:when>
                     <c:when test="${type.name().equals('EXPERIENCE') || type.name().equals('EDUCATION')}">
+                        <c:forEach var="company" items="<%=((CompanySection) section).getCompanies()%>" varStatus="counter">
+                            <dl>
+                                <dt>Название учереждения:</dt>
+                                <dd>
+                                    <label>
+                                        <input type="text" name="${type}" size="120" value="${company.name}">
+                                    </label>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>Сайт учереждения:</dt>
+                                <dd>
+                                    <label>
+                                        <input type="text" name="${type}url" size="120" value="${company.website}">
+                                    </label>
+                                </dd>
+                            </dl>
+                            <br>
+                            <div style="margin-left: 30px">
+                                <c:forEach var="period" items="${company.periods}">
+                                    <jsp:useBean id="period" type="com.topjava.webapp.model.Company.Period"/>
+                                    <dl>
+                                        <dt>Начальная дата:</dt>
+                                        <dd>
+                                            <label>
+                                                <input type="text" name="${type}${counter.index}startDate" size="10"
+                                                    value="<%=DateUtil.toHtml(period.getStartDate())%>" placeholder="MM/yyyy">
+                                            </label>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>Конечная дата:</dt>
+                                        <dd>
+                                            <label>
+                                                <input type="text" name="${type}${counter.index}endDate" size="10"
+                                                       value="<%=DateUtil.toHtml(period.getEndDate())%>" placeholder="MM/yyyy"/>
+                                            </label>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>Должность:</dt>
+                                        <dd>
+                                            <label>
+                                                <input type="text" name="${type}${counter.index}title" size="10"
+                                                       value="${period.title}"/>
+                                            </label>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>Описание:</dt>
+                                        <dd>
+                                            <label>
+                                                <input type="text" name="${type}${counter.index}description" size="10"
+                                                       value="${period.description}"/>
+                                            </label>
+                                        </dd>
+                                    </dl>
+                                </c:forEach>
+                            </div>
+                        </c:forEach>
                     </c:when>
                 </c:choose>
             </dl>

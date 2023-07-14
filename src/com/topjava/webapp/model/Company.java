@@ -19,6 +19,7 @@ import static com.topjava.webapp.util.DateUtil.NOW;
 public class Company implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    public static final Company EMPTY = new Company("", "", Period.EMPTY);
     private String name;
     private String website;
     private List<Period> periods;
@@ -83,6 +84,7 @@ public class Company implements Serializable {
     public static class Period implements Serializable {
 
         private static final long serialVersionUID = 1L;
+        public static final Period EMPTY = new Period();
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate startDate;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)

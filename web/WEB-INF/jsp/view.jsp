@@ -25,44 +25,48 @@
         <c:forEach var="sectionEntry" items="${resume.sections}">
             <jsp:useBean id="sectionEntry"
                          type="java.util.Map.Entry<com.topjava.webapp.model.SectionType, com.topjava.webapp.model.AbstractSection>"/>
-            <h2><%=sectionEntry.getKey().getTitle()%></h2>
+            <c:set var="type" value="${sectionEntry.key}"/>
+            <c:set var="section" value="${sectionEntry.value}"/>
+            <jsp:useBean id="section" type="com.topjava.webapp.model.AbstractSection"/>
+            <h2>${type.title}</h2>
+
         <c:choose>
-        <c:when test="${sectionEntry.key.name().equals('PERSONAL') || sectionEntry.key.name().equals('OBJECTIVE')}">
-                <%=((TextSection) sectionEntry.getValue()).getText()%>
-        </c:when>
-        <c:when test="${sectionEntry.key.name().equals('ACHIEVEMENT') || sectionEntry.key.name().equals('QUALIFICATIONS')}">
-    <ul>
-        <c:forEach var="item" items="<%=((ListSection) sectionEntry.getValue()).getItems()%>">
-            <li>${item}</li>
-        </c:forEach>
-    </ul>
-    </c:when>
-    <c:when test="${sectionEntry.key.name().equals('EXPERIENCE') || sectionEntry.key.name().equals('EDUCATION')}">
-        <c:forEach var="company" items="<%=((CompanySection) sectionEntry.getValue()).getCompanies()%>">
-            <table id="sections_table">
-                <tr>
-                    <td colspan="2">
-                        <c:choose>
-                            <c:when test="${company.website != null}">
-                                <h3><a href="${company.website}">${company.name}</a></h3>
-                            </c:when>
-                            <c:otherwise>
-                                <h3>${company.name}</h3>
-                            </c:otherwise>
-                        </c:choose>
-                    </td>
-                </tr>
-                <c:forEach var="period" items="${company.periods}">
-                    <jsp:useBean id="period" type="com.topjava.webapp.model.Company.Period"/>
-                    <tr>
-                        <td id="dates"><%=DateUtil.toHtml(period.getStartDate(), period.getEndDate())%></td>
-                        <td><b>${period.title}</b><br>${period.description}</td>
-                    </tr>
+            <c:when test="${type.name().equals('PERSONAL') || type.name().equals('OBJECTIVE')}">
+                    <%=((TextSection) section).getText()%>
+            </c:when>
+            <c:when test="${type.name().equals('ACHIEVEMENT') || type.name().equals('QUALIFICATIONS')}">
+                <ul>
+                    <c:forEach var="item" items="<%=((ListSection) section).getItems()%>">
+                        <li>${item}</li>
+                    </c:forEach>
+                </ul>
+            </c:when>
+            <c:when test="${type.name().equals('EXPERIENCE') || type.name().equals('EDUCATION')}">
+                <c:forEach var="company" items="<%=((CompanySection) section).getCompanies()%>">
+                    <table id="sections_table">
+                        <tr>
+                            <td colspan="2">
+                                <c:choose>
+                                    <c:when test="${empty company.website}">
+                                        <h3>${company.name}</h3>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <h3><a href="${company.website}">${company.name}</a></h3>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
+                        <c:forEach var="period" items="${company.periods}">
+                            <jsp:useBean id="period" type="com.topjava.webapp.model.Company.Period"/>
+                            <tr>
+                                <td id="dates"><%=DateUtil.toHtml(period.getStartDate()) + " - " +  DateUtil.toHtml(period.getEndDate())%></td>
+                                <td><b>${period.title}</b><br>${period.description}</td>
+                            </tr>
+                        </c:forEach>
+                    </table>
                 </c:forEach>
-            </table>
-        </c:forEach>
-    </c:when>
-    </c:choose><br>
+            </c:when>
+        </c:choose><br>
     </c:forEach>
 </section>
 <jsp:include page="/WEB-INF/jsp/fragments/footer.jsp"/>

@@ -28,6 +28,9 @@
                 <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Редактировать"></a></td>
             </tr>
         </c:forEach>
+        <td>
+            <td><a href="resume?action=create"><img src="img/create.png" alt="Создать"></a></td>
+        </tr>
     </table>
 </section>
 <jsp:include page="/WEB-INF/jsp/fragments/footer.jsp"/>

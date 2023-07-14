@@ -14,6 +14,17 @@ import java.util.EnumMap;
 public class Resume implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public static final Resume EMPTY = new Resume();
+    static {
+        EMPTY.addSection(SectionType.OBJECTIVE, TextSection.EMPTY);
+        EMPTY.addSection(SectionType.PERSONAL, TextSection.EMPTY);
+        EMPTY.addSection(SectionType.ACHIEVEMENT, ListSection.EMPTY);
+        EMPTY.addSection(SectionType.QUALIFICATIONS, ListSection.EMPTY);
+        EMPTY.addSection(SectionType.EXPERIENCE, new CompanySection(Company.EMPTY));
+        EMPTY.addSection(SectionType.EDUCATION, new CompanySection(Company.EMPTY));
+    }
+
     private String uuid;
     private String fullName;
     private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
@@ -38,6 +49,10 @@ public class Resume implements Serializable {
 
     public String getFullName() {
         return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public Map<ContactType, String> getContacts() {
